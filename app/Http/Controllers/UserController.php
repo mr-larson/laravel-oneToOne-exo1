@@ -14,7 +14,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+        return view('backoffice.user.all', compact('users'));
     }
 
     /**
@@ -24,7 +25,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::all();
+        return view('backoffice.user.all', compact('users'));
     }
 
     /**
@@ -35,7 +37,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User();
+
+        $user->email = $request->email ; 
+        $user->nickname = $request->nickname ; 
+        $user->profil_id = $request->profil_id ; 
+
+        $user->save();
+        
+
     }
 
     /**
@@ -46,7 +56,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('backoffice.user.show', compact('user'));
     }
 
     /**
@@ -57,7 +67,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('backoffice.user.edit', compact('user'));
     }
 
     /**
@@ -69,7 +79,14 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $user->email = $request->email ; 
+        $user->nickname = $request->nickname ; 
+        $user->profil_id = $request->profil_id ; 
+
+        $user->save();
+
+        return redirect()->route("user.index")->with("sucessMessage", "Le User à bien été modifié");
+
     }
 
     /**
@@ -80,6 +97,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->back()->with("sucessMessage", "Le User à bien été supprimé");
     }
 }

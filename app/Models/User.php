@@ -13,7 +13,7 @@ class User extends Model
     protected $fillable = [
         'email',
         'nickname',
-        'profils_id'
+        'profil_id'
     ];
     public function profil(){
         return $this->belongsTo(Profil::class);

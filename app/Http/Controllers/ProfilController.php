@@ -40,9 +40,10 @@ class ProfilController extends Controller
         $profil->name = $request->name;
         $profil->age = $request->age;
         $profil->phone = $request->phone;
+        $profil->created_at = now();
 
         $profil->save;
-
+        return redirect()->route('profil.index')->with('successMessage', "Votre Profil à bien été ajouté");
     }
 
     /**
@@ -53,7 +54,7 @@ class ProfilController extends Controller
      */
     public function show(Profil $profil)
     {
-        //
+        return view('backoffice.profil.show', compact('profil'));
     }
 
     /**
@@ -64,7 +65,7 @@ class ProfilController extends Controller
      */
     public function edit(Profil $profil)
     {
-        //
+        return view('backoffice.profil.edit', compact('profil'));   
     }
 
     /**
@@ -76,7 +77,13 @@ class ProfilController extends Controller
      */
     public function update(Request $request, Profil $profil)
     {
-        //
+        
+        $profil->name = $request->name;
+        $profil->age = $request->age;
+        $profil->phone = $request->phone;
+        $profil->updated_at = now();
+        $profil->save();
+        return redirect()->route('profil.index')->with('successMessage', "Votre Profil à bien été modifié");
     }
 
     /**
@@ -87,6 +94,8 @@ class ProfilController extends Controller
      */
     public function destroy(Profil $profil)
     {
-        //
+        $profil->delete();
+        return redirect()->back()->with("sucessMessage", "Votre profil à bien été supprimé");
+
     }
 }

@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('email');
             $table->string('nickname');
-            $table->foreignId("profil_id")->constrained("profils");
+            $table->foreignId("profil_id")->constrained("profils")->onDelete("cascade")->onUpdate("cascade");
             $table->timestamps();
         });
     }

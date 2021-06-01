@@ -4,7 +4,7 @@ effacez le model user de base et les fichiers migrations, ainsi que la blade wel
 
 -Créez deux tables : users(id,email,nickname,profil_id) & profils(id,name,age,phone)
 -Créez un model User et Profil
--Créez un ficher controller pour User
+-Créez un fichier controller pour User
 -Créez une blade pour pouvoir rajouter un user, sur le formulaire user il est possible de créer un user en remplissant a la fois la table user et la table profil
 -Créez une blade ou afficher tous les users 
 - Premiere étape afficher leur email et nickname 
