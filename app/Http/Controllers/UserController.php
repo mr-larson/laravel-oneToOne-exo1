@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profil;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,7 @@ class UserController extends Controller
     public function create()
     {
         $users = User::all();
-        return view('backoffice.user.all', compact('users'));
+        return view('backoffice.user.create', compact('users'));
     }
 
     /**
@@ -37,15 +38,31 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'nickname' => 'required',
+            'email' => 'required',
+            'name' => 'required',
+            'age' => 'required',
+            'phone' => 'required'
+        ]);
+
+        // store profil
+        $profil = new Profil();
+        $profil->name = $request->name;
+        $profil->age = $request->age;
+        $profil->phone = $request->phone;
+        $profil->created_at = now();
+        $profil->save();
+
+        // create
         $user = new User();
-
-        $user->email = $request->email ; 
-        $user->nickname = $request->nickname ; 
-        $user->profil_id = $request->profil_id ; 
-
+        $user->nickname = $request->nickname;
+        $user->email = $request->email;
+        $user->profil_id = $profil->id;
+        $user->created_at = now();
         $user->save();
-        
 
+        return redirect()->route('users.index')->with('message', 'le user à bien été créer.');
     }
 
     /**
@@ -79,13 +96,30 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->email = $request->email ; 
-        $user->nickname = $request->nickname ; 
-        $user->profil_id = $request->profil_id ; 
+        $request->validate([
+            'nickname' => 'required',
+            'email' => 'required',
+            'name' => 'required',
+            'age' => 'required',
+            'phone' => 'required'
+        ]);
 
+        // store profil
+        $profil = $user->profil;
+        $profil->name = $request->name;
+        $profil->age = $request->age;
+        $profil->phone = $request->phone;
+        $profil->updated_at = now();
+        $profil->save();
+
+        // create
+        $user->nickname = $request->nickname;
+        $user->email = $request->email;
+        $user->profil_id = $profil->id;
+        $user->updated_at = now();
         $user->save();
 
-        return redirect()->route("user.index")->with("sucessMessage", "Le User à bien été modifié");
+        return redirect()->route('users.index')->with('message', 'le user à bien été édité.');
 
     }
 
@@ -98,6 +132,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->back()->with("sucessMessage", "Le User à bien été supprimé");
+        $user->profil->delete();
+        return redirect()->back()->with("sucessMessage", "Le user à bien été supprimé");
     }
 }
